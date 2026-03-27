@@ -1,47 +1,237 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome to The NFL Edge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The NFL Edge - The Original FREE Internet Analytical Handicapper</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             background-color: black;
             color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
         }
-        h1, h2 {
+        
+        /* Main Page Container - Centered with margins */
+        .page-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px 20px 0 20px;
+        }
+        
+        /* Header with Banner */
+        .header-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .banner {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .floating-link-box {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 3px solid #ff0000;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            max-width: 100px;
+        }
+        
+        .floating-link-box img {
+            width: 80px;
+            height: 80px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        .floating-link-box a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+            display: block;
+            transition: color 0.3s ease;
+        }
+        
+        .floating-link-box a:hover {
+            color: #ff6666;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            padding: 15px 20px;
+            background-color: #1a1a1a;
+            border: 2px solid #333;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .breadcrumb a {
+            color: #ff0000;
+            text-decoration: none;
+            margin: 0 8px;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #ff6666;
+        }
+        
+        .breadcrumb span {
+            color: #666;
+            margin: 0 5px;
+        }
+        
+        /* Subheader with Greek Flag */
+        .subheader {
+            margin: 30px 0 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .subheader img {
+            width: 24px;
+            height: 24px;
+            margin: 0 5px;
+            vertical-align: middle;
+        }
+        
+        /* Main Title */
+        .main-title {
+            font-size: 48px;
+            font-weight: bold;
             color: white;
+            margin: 10px 0;
+            letter-spacing: 2px;
         }
-        p, li {
-            color: white;
+        
+        /* Tagline */
+        .tagline {
+            font-size: 13px;
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-style: italic;
         }
-        a {
-            color: #87ceeb;
+        
+        /* Content Frame */
+        .content-frame {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            margin: 30px 0;
+            background-color: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .content-frame img {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-top: 30px;
+            padding: 20px 0;
+            border-top: 1px solid #333;
+        }
+        
+        /* Legal Disclaimer - Full width outside page boundary */
+        .legal-disclaimer {
+            background-color: black;
+            color: #333;
+            font-size: 8px;
+            line-height: 1.3;
+            margin-top: 40px;
+            padding: 15px 20px;
+            text-align: center;
+            border-top: 2px solid #ff0000;
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+        }
+        
+        .legal-disclaimer p {
+            color: #333;
         }
     </style>
 </head>
 <body>
-    <img src="./2014/NFLBAN014.jpg" alt="NFL Banner" style="width:100%;">
-    <h1>Welcome to The NFL Edge</h1>
-    <section id="about">
-        <h2>GUESS WHO is back... </h2>
-        <iframe src="2014/nfleOS.htm" width="100%" height="500px" title="Data Display Frame" style="border: 2px solid #ccc; border-radius: 8px;">
-         </iframe>
-    </section>
-    <section id="features">
-        <h2>Greggy the Greek </h2>
-        <ul>
-            <li>The OG designer of NFL Data analytics</li>
-            <li>Analytics driven NFL Gaming INFO </li>
-            <li>Giving out FREE WINNERS on the internet since 1997</li>
-        </ul>
-    </section>
-    <section> <img src="EDGEBAN21.jpg" alt="NFL Banner" style="width:100%;"></section>
-    <section id="contact">
-        <h2>Coming soon</h2>
-        <p>set your browser and CHECK BACK SOON!</p>
-    </section>
+    <!-- Main Page Wrapper -->
+    <div class="page-wrapper">
+        <!-- Header with Banner and Floating Link Box -->
+        <div class="header-container">
+            <div class="floating-link-box">
+                <img src="path/to/spinning-football.gif" alt="Spinning Football">
+                <a href="#enter">ENTER</a>
+            </div>
+            <img src="EDGEBAN21.jpg" alt="The NFL Edge Banner" class="banner">
+            </div>
+        
+        <!-- Breadcrumb Navigation (TBD) -->
+        <div class="breadcrumb">
+            <a href="#home">Home</a>
+            <span>/</span>
+            <a href="#about">About</a>
+            <span>/</span>
+            <a href="#contact">Contact</a>
+        </div>
+        
+        <!-- Subheader with Greek Flag -->
+        <div class="subheader">
+            Greggy the Greek's <img src="path/to/greek-flag.gif" alt="Greek Flag">:
+        </div>
+        
+        <!-- Main Title -->
+        <h1 class="main-title">The NFL Edge</h1>
+        
+        <!-- Tagline -->
+        <p class="tagline">The original FREE Internet Analytical Handicapper</p>
+        
+        <!-- Content Frame -->
+        <div class="content-frame">
+            <img src="path/to/under-construction.gif" alt="Under Construction">
+        </div>
+        
+        <!-- Copyright -->
+        <div class="copyright">
+            &copy; 2026 The NFL Edge. All rights reserved.
+        </div>
+    </div>
+    
+    <!-- Legal Disclaimer - Full Width -->
+    <div class="legal-disclaimer">
+        <p>
+            <strong>LEGAL DISCLAIMER:</strong> This website and all content contained herein is provided for amusement and entertainment purposes only. All descriptions, language, predictions, statistics, and commentary presented on this site are satirical parodies and are not intended to be taken as factual representations. Any references to betting, wagering, gambling, or similar activities are hypothetical in nature and exist solely within this electronic realm. This website does not promote, endorse, or facilitate actual gambling or wagering of any kind. The information, predictions, and analysis presented here are not based on real people, real world events, or actual financial transactions. Users assume all responsibility for their own actions and decisions made in reliance upon information presented on this site. The NFL Edge and its creators assume no liability for any damages or losses resulting from the use of this website.
+        </p>
+    </div>
 </body>
 </html>
