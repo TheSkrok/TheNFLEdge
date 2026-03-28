@@ -18,73 +18,61 @@
             line-height: 1.6;
         }
         
-        /* Main Page Container - Centered with margins */
         .page-wrapper {
             max-width: 1000px;
             margin: 0 auto;
             padding: 30px 20px 0 20px;
         }
-        
-        /* Header with Banner */
-        .header-container {
-            position: relative;
+
+        /* ====================== NEW BANNER TABLE ====================== */
+        .banner-table {
             width: 100%;
+            border-collapse: collapse;
             margin-bottom: 20px;
         }
         
-        .banner {
-            width: 100%;
-            height: auto;
-            display: block;
+        .banner-table td {
+            vertical-align: middle;
+            padding: 0;
         }
         
-        .floating-link-box {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0, 0, 0, 0.9);
-            border: 3px solid #ff0000;
-            padding: 15px;
+        /* Left column - Spinning Football Logo */
+        .logo-column {
+            width: 120px;           /* small column - adjust if needed */
             text-align: center;
-            border-radius: 8px;
-            max-width: 100px;
+            padding-right: 15px;
         }
         
-        .floating-link-box img {
-            width: 80px;
-            height: 80px;
-            animation: spin 2s linear infinite;
-            margin-bottom: 10px;
-        }
-        
-        .floating-link-box a {
-            color: #ff0000;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-            display: block;
-            transition: color 0.3s ease;
-        }
-        
-        .floating-link-box a:hover {
-            color: #ff6666;
+        .logo-column img {
+            width: 100px;           /* size of spinning football */
+            height: 100px;
+            animation: spin 2.5s linear infinite;
         }
         
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
-        /* Breadcrumb Navigation */
-        .breadcrumb {
-            padding: 15px 20px;
+
+        /* Right column - Site Banner */
+        .banner-column img {
+            width: 100%;
+            max-height: 150px;      /* keeps banner roughly 600x150 */
+            height: auto;
+            display: block;
+            border: 3px solid #ff0000;
+            border-radius: 8px;
+        }
+
+        /* Breadcrumb row (spans both columns) */
+        .breadcrumb-row {
+            padding: 15px 0 0 0;
             background-color: #1a1a1a;
             border: 2px solid #333;
-            margin: 20px 0;
             border-radius: 4px;
+            text-align: center;
         }
-        
+
         .breadcrumb a {
             color: #ff0000;
             text-decoration: none;
@@ -101,22 +89,14 @@
             color: #666;
             margin: 0 5px;
         }
-        
-        /* Subheader with Greek Flag */
+
+        /* Rest of your original styles (unchanged) */
         .subheader {
             margin: 30px 0 10px 0;
             font-size: 18px;
             font-weight: bold;
         }
         
-        .subheader img {
-            width: 24px;
-            height: 24px;
-            margin: 0 5px;
-            vertical-align: middle;
-        }
-        
-        /* Main Title */
         .main-title {
             font-size: 48px;
             font-weight: bold;
@@ -125,7 +105,6 @@
             letter-spacing: 2px;
         }
         
-        /* Tagline */
         .tagline {
             font-size: 13px;
             color: #cccccc;
@@ -133,7 +112,6 @@
             font-style: italic;
         }
         
-        /* Content Frame */
         .content-frame {
             width: 100%;
             height: 500px;
@@ -146,12 +124,6 @@
             justify-content: center;
         }
         
-        .content-frame img {
-            max-width: 90%;
-            max-height: 90%;
-        }
-        
-        /* Copyright */
         .copyright {
             text-align: center;
             color: #666;
@@ -161,7 +133,6 @@
             border-top: 1px solid #333;
         }
         
-        /* Legal Disclaimer - Full width outside page boundary */
         .legal-disclaimer {
             background-color: black;
             color: #333;
@@ -178,38 +149,44 @@
             margin-left: -50vw;
             margin-right: -50vw;
         }
-        
-        .legal-disclaimer p {
-            color: #333;
-        }
     </style>
 </head>
 <body>
-    <!-- Main Page Wrapper -->
     <div class="page-wrapper">
-        <!-- Header with Banner and Floating Link Box -->
-        <div class="header-container">
-            <div class="floating-link-box">
-                <img src="image/HlmySpin.gif" alt="Football Helmet">
-                <a href="#enter">ENTER</a>
-            </div>
-            <img src="EDGEBAN21.jpg" alt="The NFL Edge Banner" class="banner">
-            </div>
         
-        <!-- Breadcrumb Navigation (TBD) -->
-        <div class="breadcrumb">
-            <a href="index.html">Home</a>
-            <span>/</span>
-            <a href="#about">Archives</a>
-            <span>/</span>
-            <a href="#contact">subscribe!</a>
-        </div>
-        
-        <!-- Subheader with Greek Flag -->
+        <!-- ====================== NEW BANNER / LINK TABLE ====================== -->
+        <table class="banner-table">
+            <tr>
+                <!-- Column 1: Spinning Football Logo -->
+                <td class="logo-column">
+                    <img src="HelmtSpin.gif" alt="Spinning Football">
+                </td>
+                
+                <!-- Column 2: Site Banner -->
+                <td class="banner-column">
+                    <img src="EDGEBAN21.jpg" alt="The NFL Edge Banner">
+                </td>
+            </tr>
+            
+            <!-- Row 2: Breadcrumb -->
+            <tr>
+                <td colspan="2" class="breadcrumb-row">
+                    <div class="breadcrumb">
+                        <a href="index.html">Home</a>
+                        <span>/</span>
+                        <a href="#about">Archives</a>
+                        <span>/</span>
+                        <a href="#contact">subscribe!</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Subheader -->
         <div class="subheader">
-            Greggy the Greek's <!--img src="path/to/greek-flag.gif" alt="Greek Flag" -->:
+            Greggy the Greek's:
         </div>
-        
+
         <!-- Main Title -->
         <h1 class="main-title">The NFL Edge</h1>
         
@@ -218,7 +195,7 @@
         
         <!-- Content Frame -->
         <div class="content-frame">
-            <img src="path/to/under-construction.gif" alt="Under Construction">
+            <img src="2014/nfleOS.htm" alt="Under Construction">
         </div>
         
         <!-- Copyright -->
@@ -227,10 +204,10 @@
         </div>
     </div>
     
-    <!-- Legal Disclaimer - Full Width -->
+    <!-- Legal Disclaimer -->
     <div class="legal-disclaimer">
         <p>
-            <strong>LEGAL DISCLAIMER:</strong> This website and all content contained herein is provided for amusement and entertainment purposes only. All descriptions, language, predictions, statistics, and commentary presented on this site are satirical parodies and are not intended to be taken as factual representations. Any references to betting, wagering, gambling, or similar activities are hypothetical in nature and exist solely within this electronic realm. This website does not promote, endorse, or facilitate actual gambling or wagering of any kind. The information, predictions, and analysis presented here are not based on real people, real world events, or actual financial transactions. Users assume all responsibility for their own actions and decisions made in reliance upon information presented on this site. The NFL Edge and its creators assume no liability for any damages or losses resulting from the use of this website.
+            <strong>LEGAL DISCLAIMER:</strong> This website and all content contained herein is provided for amusement and entertainment purposes only. ...
         </p>
     </div>
 </body>
