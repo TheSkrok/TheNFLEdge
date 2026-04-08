@@ -1,0 +1,33 @@
+name: UFL Weekly Issue Generator
+on:
+  schedule:
+    - cron: '0 3 * * 3' # 3:00 AM UTC Wednesday (11 PM ET Tuesday)
+  workflow_dispatch: # Allows you to run it manually for testing
+
+jobs:
+  update-ufl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Update Stats and Archive Issue
+        env:
+          PG_PI_X: ${{ secrets.PG_PI_X }}
+          PG_PI7: ${{ secrets.PG_PI7 }}
+          PG_PPI5: ${{ secrets.PG_PPI5 }}
+          PG_PI2: ${{ secrets.PG_PI2 }}
+          PG_PI0: ${{ secrets.PG_PI0 }}
+          PG_MD: ${{ secrets.PG_MD }}
+        run: python UFL/ufl_wkly_updater.py
+
+      - name: Commit Updated Files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated UFL Weekly Update & Archiving"
