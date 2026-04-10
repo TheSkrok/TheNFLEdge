@@ -1,0 +1,77 @@
+<head><title>The NFL Edge: The winning edge for NFL Fantasy Football </title>
+<SCRIPT LANGUAGE="JavaScript">
+function addbookmark()
+{
+bookmarkurl="http://www.thenfledge.com/"
+bookmarktitle="The NFL Edge"
+if (document.all)
+window.external.AddFavorite(bookmarkurl,bookmarktitle)
+}
+</SCRIPT>
+<style><!--
+TD P { font-family: "Arial"; font-size: 9pt; font-weight: medium }
+P { font-family: "Arial"; font-size: 9pt; font-weight: medium }
+H4 { font-family: "Arial"; font-size: 11pt }
+H3 { font-family: "Arial"; font-size: 12pt }
+H2 { font-family: "Arial"; font-size: 14pt }
+H1 { font-family: "Arial"; font-size: 16pt; text-align: "center"; }
+--> </style>
+</head>
+<body>
+<h2>THE NFL EDGE: FANTASY FOOTBALL<br>
+</h2>
+<h3>Fantasy Football Special Issue  </h3>
+<p>Looking for More Fantasy Football--Yeah we got it!  <br>
+ 
+
+<p>
+<!###################IFRAME>
+<!###################IFRAME>
+
+<center>
+<!LIVE_FANDUEL_FEED>
+
+<table width="500" border="0" cellspacing="1" cellpadding="0" align="center">
+<tr>
+<td align="center"><p> Latest FANTASY NEWS</p></td>
+</tr>
+<tr>
+<td><iframe src="http://partners.fanduel.com/articlelist.asp?s=2794&m=2&l=1&o=new&f=simple" width="525"" height="800" frameborder="0"></iframe>
+</td>
+</tr>
+<tr>
+<td align="center"><input value="CLICK TO BET!" type="button" class="button" onClick="javascript:location.href='http://partner.tbaffiliate.com/PlayerRegisterRedirect.html?lid=1306&affid=1548&sourceid=1
+'"></td>
+</tr>
+
+</table>
+<!/FFOOTBALL_FEED>
+</center>
+<!###################/IFRAME>
+<!###################/IFRAME>
+<BR> &nbsp;
+
+<center>
+<BR><IMG SRC="http://www.panageotech.com/thenfledge/arena/anim_fball.gif">
+<h3><a href="http://www.panageotech.com/thenfledge/archives.html">
+THE NFL EDGE <BR>Archives Page</a><br>&nbsp;
+</h3>
+
+<P><A HREF="http://www.panageotech.com/thenfledge/linespage.html" TARGET="_BLANK">GET THE LIVE NFL BETTING LINES NOW!</A> &nbsp;&nbsp;|&nbsp;&nbsp;<A HREF="http://www.panageotech.com/thenfledge/nfle.htm">Get the Edge!</a></P>
+
+<img src="http://www.tqlkg.com/image-2278711-10443498" width="1" height="1" border="0"/> 
+&nbsp;&nbsp;|&nbsp;&nbsp;v
+<A HREF="http://www.panageotech.com/thenbaedge" TARGET="_BLANK">www.theNBAedge.com</A>  </P>
+<p>
+WE GAVE OUT FREE WINNERS at <b>OVER 90%</b> at <A HREF="http://www.panageotech.com/thenbaedge" >www.theNBAedge.com</A> and even BEAT THE SPREAD <b>84%</b>!!! 
+</p>
+
+<!NBADBANNER>
+<center>
+<A HREF="http://www.panageotech.com/thenbaedge" TARGET="_BLANK"><img src="http://www.panageotech.com/thenbaedge/images/2012nbabannerad.jpg" width="450" height="140" alt="Get 90% NBA WINNERS! Get the NBA Edge!" border="0"/></A>
+</center></p>
+<!/NBADBANNER>
+<!/$$$$$$$$$$$NBADBANNER>
+
+</center>
+

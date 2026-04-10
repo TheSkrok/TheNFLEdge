@@ -1,0 +1,52 @@
+PLAN: Build an automated “fresh content engine” for The NFL Edge using GitHub Pages + GitHub Actions.
+
+GOAL:
+- Automatically update the homepage iframe with the newest weekly content.
+- Avoid editing HTML manually.
+- Keep the site static, fast, and fully GitHub‑hosted.
+
+ARCHITECTURE:
+1. Store weekly content in a structured folder:
+   /content/YYYY/weekX.htm
+
+2. Maintain a JSON file at the repo root:
+   latest.json
+   {
+     "latest": "content/YYYY/weekX.htm"
+   }
+
+3. Homepage loads content dynamically:
+   <iframe id="contentFrame"></iframe>
+   <script>
+     fetch("latest.json")
+       .then(r => r.json())
+       .then(data => {
+         document.getElementById("contentFrame").src = data.latest;
+       });
+   </script>
+
+4. GitHub Action workflow:
+   - Trigger on push to main.
+   - Detect newest .htm file in /content/.
+   - Update latest.json automatically.
+   - Commit the update.
+   - Trigger GitHub Pages rebuild.
+
+5. Optional enhancements:
+   - Generate an archive index JSON.
+   - Auto‑rotate older content.
+   - Add a “Latest Analysis” badge.
+   - Add a dropdown of all weeks.
+   - Add season‑based logic (auto‑switch each NFL week).
+   - Add sitemap.xml for SEO.
+
+WHAT I NEED FROM YOU WHEN READY:
+- Confirm the folder structure you want (e.g., /content/2024/).
+- Confirm your preferred naming convention (week1.htm, wk01.htm, etc.).
+- Confirm whether you want random rotation, latest only, or date‑based logic.
+- Then I will generate:
+  ✔ the GitHub Action YAML
+  ✔ the updated HTML
+  ✔ the JSON structure
+  ✔ optional archive UI
+  ✔ optional auto‑rotation logic
