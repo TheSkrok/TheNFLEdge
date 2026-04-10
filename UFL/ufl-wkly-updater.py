@@ -26,7 +26,8 @@ if __name__ == "__main__":
     
     # 2. Run the Scraper (updates ufl-data.csv)
     print("🚀 Running Scraper...")
-    subprocess.run(["python", "UFL/ufl-datascraper.py"])
+    subprocess.run(["python", "UFL/ufl-datascraper.py"], check=True)
+
     
     # 3. Run the Projections (reads ufl-data.csv -> writes UFLWTmp.htm)
     print(f"📊 Generating projections for Week {current_wk + 1}...")
