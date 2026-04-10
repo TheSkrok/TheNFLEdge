@@ -60,8 +60,8 @@ td {{ padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 0.95em; }}
 </html>"""
 
 if __name__ == "__main__":
-    d_f = 'UFL/stats.csv'
-    o_f = 'UFL/panageo.htm'
+    d_f = 'UFL/ufl-data.csv'
+    o_f = 'UFL/UFLWTmp.htm'
     r_h = ""
     try:
         with open(d_f, mode='r') as f:
