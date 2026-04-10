@@ -1,9 +1,6 @@
-team,pf,pa,games,win_ratio
-Birmingham,46,27,2,1.0
-DC,54,42,2,0.5
-St_Louis,16,10,1,1.0
-Dallas,36,17,1,1.0
-Orlando,23,16,1,1.0
-Louisville,13,15,1,0.0
-Houston,31,51,2,0.0
-Columbus,42,67,2,0.0
+POSITION,POSITION.1,TOTAL,TODAY
+T1,S. Burns,-5,-5 (F)
+T1,R. McIlroy,-5,-5 (F)
+T3,K. Kitayama,-3,-3 (F)
+T3,J. Day,-3,-3 (F)
+T3,P. Reed,-3,-3 (F)
