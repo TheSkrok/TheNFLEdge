@@ -1,23 +1,35 @@
 import pandas as pd
-import requests
 
 def scrape_ufl_data():
-    # 1. Scrape Standings for Stats (PF, PA, GP)
-    standings_url = "https://foxsports.com"
+    # Focused UFL URL
+    url = "https://foxsports.com"
+    
     try:
-        tables = pd.read_html(standings_url)
-        stats_df = tables[0] # Assuming first table is standings
+        # Instead of a team name, we match on a column header unique to football standings
+        tables = pd.read_html(url, match='PF') 
+        df = tables[0]
         
-        # Clean Team names (Fox adds ranks like "1 DC Defenders")
-        stats_df['team_clean'] = stats_df['TEAMS'].str.replace(r'^\d+\s+', '', regex=True).str.strip()
-        stats_df = stats_df.rename(columns={'PF': 'pf', 'PA': 'pa', 'W': 'gp4'})
-        stats_map = stats_df.set_index('team_clean')[['pf', 'pa', 'gp4']].to_dict('index')
+        # Identify the Team column (usually the first one) and stats columns
+        # Fox often names the first column 'TEAMS' or 'TEAM'
+        team_col = [c for c in df.columns if 'TEAM' in str(c).upper()][0]
+        
+        # Map stats into a dictionary
+        stats_map = {}
+        for _, row in df.iterrows():
+            # Strip ranking numbers (e.g., "1 Renegades" -> "Renegades")
+            name = str(row[team_col]).replace(r'^\d+\s+', '', regex=True).strip()
+            stats_map[name] = {
+                'pf': row.get('PF', 0),
+                'pa': row.get('PA', 0),
+                'gp4': row.get('W', 0) + row.get('L', 0) # Games Played
+            }
+        print(f"✅ Successfully mapped {len(stats_map)} UFL teams.")
+        
     except Exception as e:
-        print(f"Error scraping standings: {e}")
+        print(f"❌ Brittle check failed: {e}")
         return
 
-    # 2. Matchup Data for Week 4 (Hardcoded for accuracy as schedule pages vary)
-    # We will automate this fully once the season settles, but for Week 4:
+    # Matchup Logic (Week 4)
     week_4_matchups = [
         {"team": "Louisville Kings", "opp": "Houston Gamblers"},
         {"team": "Dallas Renegades", "opp": "Columbus Aviators"},
@@ -25,28 +37,20 @@ def scrape_ufl_data():
         {"team": "Orlando Storm", "opp": "Birmingham Stallions"}
     ]
 
-    # 3. Merge Stats into Matchups
     final_rows = []
     for m in week_4_matchups:
-        team_stats = stats_map.get(m['team'], {'pf': 0, 'pa': 0, 'gp4': 1})
-        opp_stats = stats_map.get(m['opp'], {'pf': 0, 'pa': 0, 'gp4': 1})
+        t_s = stats_map.get(m['team'], {'pf': 0, 'pa': 0, 'gp4': 1})
+        o_s = stats_map.get(m['opp'], {'pf': 0, 'pa': 0, 'gp4': 1})
         
-        row = {
-            "team": m['team'],
-            "opp": m['opp'],
-            "pf": team_stats['pf'],
-            "pa": team_stats['pa'],
-            "gp4": team_stats['gp4'],
-            "pp4v": 0.5, # Default variance
-            "v_pf": opp_stats['pf'],
-            "v_pa": opp_stats['pa'],
-            "vgp4": opp_stats['gp4']
-        }
-        final_rows.append(row)
+        final_rows.append({
+            "team": m['team'], "opp": m['opp'],
+            "pf": t_s['pf'], "pa": t_s['pa'], "gp4": t_s['gp4'],
+            "pp4v": 0.5,
+            "v_pf": o_s['pf'], "v_pa": o_s['pa'], "vgp4": o_s['gp4']
+        })
 
-    # 4. Save to ufl-data.csv
     pd.DataFrame(final_rows).to_csv('UFL/ufl-data.csv', index=False)
-    print("✅ ufl-data.csv updated with Week 4 matchups and season stats.")
+    print("✅ ufl-data.csv updated with robust header-matching.")
 
 if __name__ == "__main__":
     scrape_ufl_data()
