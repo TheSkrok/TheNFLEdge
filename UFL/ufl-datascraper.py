@@ -1,56 +1,60 @@
-import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import csv
 
-def scrape_ufl_data():
-    # Focused UFL URL
-    url = "https://foxsports.com"
+def scrape_ufl_to_csv():
+    url = "https://www.theufl.com/standings"
+    
+    # Advanced headers to mimic a real browser session
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Referer': 'https://google.com',
+        'Connection': 'keep-alive'
+    }
+
+    session = requests.Session()
     
     try:
-        # Instead of a team name, we match on a column header unique to football standings
-        tables = pd.read_html(url, match='PF') 
-        df = tables[0]
+        response = session.get(url, headers=headers, timeout=10)
+        soup = BeautifulSoup(response.text, 'html.parser')
         
-        # Identify the Team column (usually the first one) and stats columns
-        # Fox often names the first column 'TEAMS' or 'TEAM'
-        team_col = [c for c in df.columns if 'TEAM' in str(c).upper()][0]
-        
-        # Map stats into a dictionary
-        stats_map = {}
-        for _, row in df.iterrows():
-            # Strip ranking numbers (e.g., "1 Renegades" -> "Renegades")
-            name = str(row[team_col]).replace(r'^\d+\s+', '', regex=True).strip()
-            stats_map[name] = {
-                'pf': row.get('PF', 0),
-                'pa': row.get('PA', 0),
-                'gp4': row.get('W', 0) + row.get('L', 0) # Games Played
-            }
-        print(f"✅ Successfully mapped {len(stats_map)} UFL teams.")
-        
+        teams_data = {}
+        # The site may use a specific class or id; we'll try to find any table
+        table = soup.find('table')
+
+        if table:
+            rows = table.find_all('tr')[1:] # Skip header
+            for row in rows:
+                cols = row.find_all('td')
+                if len(cols) >= 6:
+                    name = cols[0].get_text(strip=True)
+                    w = int(cols[1].get_text(strip=True) or 0)
+                    l = int(cols[2].get_text(strip=True) or 0)
+                    pf = cols[4].get_text(strip=True) or "0"
+                    pa = cols[5].get_text(strip=True) or "0"
+                    
+                    teams_data[name] = {
+                        'pf': pf,
+                        'pa': pa,
+                        'gp': str(w + l)
+                    }
+        else:
+            # If still failing, the site is likely purely JavaScript-driven
+            print("Table not found. The site may requires JavaScript execution.")
+            return
+
+        if teams_data:
+            with open('ufl-data.csv', mode='w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['name', 'pf', 'pa', 'gp'])
+                for name, stats in teams_data.items():
+                    writer.writerow([name, stats['pf'], stats['pa'], stats['gp']])
+            print("Scrape complete. ufl-data.csv updated.")
+
     except Exception as e:
-        print(f"❌ Brittle check failed: {e}")
-        return
-
-    # Matchup Logic (Week 4)
-    week_4_matchups = [
-        {"team": "Louisville Kings", "opp": "Houston Gamblers"},
-        {"team": "Dallas Renegades", "opp": "Columbus Aviators"},
-        {"team": "St. Louis Battlehawks", "opp": "DC Defenders"},
-        {"team": "Orlando Storm", "opp": "Birmingham Stallions"}
-    ]
-
-    final_rows = []
-    for m in week_4_matchups:
-        t_s = stats_map.get(m['team'], {'pf': 0, 'pa': 0, 'gp4': 1})
-        o_s = stats_map.get(m['opp'], {'pf': 0, 'pa': 0, 'gp4': 1})
-        
-        final_rows.append({
-            "team": m['team'], "opp": m['opp'],
-            "pf": t_s['pf'], "pa": t_s['pa'], "gp4": t_s['gp4'],
-            "pp4v": 0.5,
-            "v_pf": o_s['pf'], "v_pa": o_s['pa'], "vgp4": o_s['gp4']
-        })
-
-    pd.DataFrame(final_rows).to_csv('UFL/ufl-data.csv', index=False)
-    print("✅ ufl-data.csv updated with robust header-matching.")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
-    scrape_ufl_data()
+    scrape_ufl_to_csv()
