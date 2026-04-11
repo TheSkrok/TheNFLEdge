@@ -1,60 +1,72 @@
-import requests
-from bs4 import BeautifulSoup
 import csv
+import os
+from playwright.sync_api import sync_playwright
 
-def scrape_ufl_to_csv():
-    url = "https://www.theufl.com/standings"
+def scrape_ufl_wikipedia_precise():
+    # TARGET URL (Must be the specific template page)
+    url = "https://en.wikipedia.org/wiki/Template:2026_UFL_standings"
     
-    # Advanced headers to mimic a real browser session
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Referer': 'https://google.com',
-        'Connection': 'keep-alive'
-    }
+    # Ensure local directory exists
+    os.makedirs('ufl', exist_ok=True)
+    output_path = os.path.join('ufl', 'ufl-data.csv')
 
-    session = requests.Session()
-    
-    try:
-        response = session.get(url, headers=headers, timeout=10)
-        soup = BeautifulSoup(response.text, 'html.parser')
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
         
-        teams_data = {}
-        # The site may use a specific class or id; we'll try to find any table
-        table = soup.find('table')
-
-        if table:
-            rows = table.find_all('tr')[1:] # Skip header
-            for row in rows:
-                cols = row.find_all('td')
-                if len(cols) >= 6:
-                    name = cols[0].get_text(strip=True)
-                    w = int(cols[1].get_text(strip=True) or 0)
-                    l = int(cols[2].get_text(strip=True) or 0)
-                    pf = cols[4].get_text(strip=True) or "0"
-                    pa = cols[5].get_text(strip=True) or "0"
-                    
-                    teams_data[name] = {
-                        'pf': pf,
-                        'pa': pa,
-                        'gp': str(w + l)
-                    }
-        else:
-            # If still failing, the site is likely purely JavaScript-driven
-            print("Table not found. The site may requires JavaScript execution.")
+        print(f"Connecting to {url}...")
+        page.goto(url, wait_until="load")
+        
+        # Locate the specific wikitable on the page
+        table = page.query_selector("table.wikitable")
+        if not table:
+            print("FAILED: Could not find the wikitable on this page.")
+            browser.close()
             return
 
-        if teams_data:
-            with open('ufl-data.csv', mode='w', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(['name', 'pf', 'pa', 'gp'])
-                for name, stats in teams_data.items():
-                    writer.writerow([name, stats['pf'], stats['pa'], stats['gp']])
-            print("Scrape complete. ufl-data.csv updated.")
+        rows = table.query_selector_all("tr")
+        teams_data = []
+        
+        for row in rows:
+            # We only want data cells (td) to skip headers automatically
+            cols = row.query_selector_all("td")
+            
+            # Requirement: Team Name(0), W(1), L(2), PCT(3), PF(8), PA(9)
+            if len(cols) >= 10:
+                texts = [c.inner_text().strip() for c in cols]
+                
+                try:
+                    name_raw = texts[0]
+                    w_val    = texts[1]
+                    l_val    = texts[2]
+                    pct_val  = texts[3]
+                    pf_val   = texts[8]
+                    pa_val   = texts[9]
 
-    except Exception as e:
-        print(f"Error: {e}")
+                    # DATA CLEANING:
+                    # Convert to float first to handle '1.000', then to int
+                    wins_int = int(float(w_val))
+                    loss_int = int(float(l_val))
+                    gp = str(wins_int + loss_int)
+                    
+                    # Clean team name of Wikipedia citation brackets like [a]
+                    name = name_raw.split('[')[0].strip()
+                    
+                    # Final CSV order: [name, pf, pa, gp, wins, pct]
+                    teams_data.append([name, pf_val, pa_val, gp, str(wins_int), pct_val])
+                except (ValueError, IndexError):
+                    continue
+
+        if teams_data:
+            with open(output_path, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['name', 'pf', 'pa', 'gp', 'wins', 'pct'])
+                writer.writerows(teams_data)
+            print(f"SUCCESS! {output_path} updated with {len(teams_data)} teams.")
+        else:
+            print("FAILED: Found the table but no rows matched the index requirements.")
+
+        browser.close()
 
 if __name__ == "__main__":
-    scrape_ufl_to_csv()
+    scrape_ufl_wikipedia_precise()
