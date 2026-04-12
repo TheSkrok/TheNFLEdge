@@ -3,219 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The NFL Edge - The Original FREE Internet Analytical Handicapper</title>
+    <title>THE NFL EDGE | PanaGeo Algorithmic Suite</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background-color: black;
-            color: white;
-            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            line-height: 1.6;
-        }
-        
-        .page-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 30px 20px 0 20px;
+        :root {
+            --nfl-navy: #00205B;
+            --nfl-red: #BF0A30;
+            --bg-dark: #050505;
+            --sidebar-width: 80px;
+            --header-height: 100px;
+            --footer-height: 40px;
         }
 
-        /* ====================== NEW BANNER TABLE ====================== */
-        .banner-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        
-        .banner-table td {
-            vertical-align: middle;
+        body, html {
+            margin: 0;
             padding: 0;
+            height: 100%;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            overflow: hidden; /* Essential for the dashboard feel */
         }
-        
-        /* Left column - Spinning Football Logo */
-        .logo-column {
-            width: 120px;           /* small column - adjust if needed */
-            text-align: center;
-            padding-right: 15px;
+
+        /* DASHBOARD LAYOUT */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
         }
-        
-        .logo-column img {
-            width: 100px;           /* size of spinning football */
-            height: 100px;
-            animation: spin 2.5s linear infinite;
+
+        /* SIDEBAR (NAV) */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: #000;
+            border-right: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            z-index: 100;
         }
-        
+
+        .helmet-logo {
+            width: 60px;
+            height: 60px;
+            animation: spin 2.5s linear infinite; /* Keeps the helm spinning */
+            cursor: pointer;
+        }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Right column - Site Banner */
-        .banner-column img {
+        /* MAIN CONTENT AREA */
+        .main-pane {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* TOP HEADER */
+        .top-header {
+            height: var(--header-height);
+            background: linear-gradient(90deg, #000 0%, var(--nfl-navy) 100%);
+            border-bottom: 2px solid var(--nfl-red);
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+        }
+
+        .nfl-banner {
+            height: 60px;
+        }
+
+        /* IFRAME VIEWPORT */
+        .projection-frame {
+            flex-grow: 1;
             width: 100%;
-            max-height: 150px;      /* keeps banner roughly 600x150 */
-            height: auto;
-            display: block;
-            border: 3px solid #ff0000;
-            border-radius: 8px;
+            border: none;
+            background-color: #000;
+            /* Leaves room for the footer */
+            margin-bottom: var(--footer-height);
         }
 
-        /* Breadcrumb row (spans both columns) */
-        .breadcrumb-row {
-            padding: 15px 0 0 0;
-            background-color: #1a1a1a;
-            border: 2px solid #333;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .breadcrumb a {
-            color: #ff0000;
-            text-decoration: none;
-            margin: 0 8px;
-            font-size: 14px;
-            transition: color 0.3s ease;
-        }
-        
-        .breadcrumb a:hover {
-            color: #ff6666;
-        }
-        
-        .breadcrumb span {
-            color: #666;
-            margin: 0 5px;
-        }
-
-        /* Rest of your original styles (unchanged) */
-        .subheader {
-            margin: 30px 0 10px 0;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .main-title {
-            font-size: 48px;
-            font-weight: bold;
-            color: white;
-            margin: 10px 0;
-            letter-spacing: 2px;
-        }
-        
-        .tagline {
-            font-size: 13px;
-            color: #cccccc;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-        
-        .content-frame {
+        /* FLOATING FOOTER */
+        .floating-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            height: 500px;
-            border: 2px solid #ff0000;
-            border-radius: 8px;
-            margin: 30px 0;
-            background-color: #0a0a0a;
+            height: var(--footer-height);
+            background-color: #000;
+            border-top: 2px solid var(--nfl-red); /* Your signature divider */
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-      
-        /* Responsive iframe inside content-frame */
-        .content-frame iframe {
-            width: 100%;
-            height: 80vh;
-            border: none;
+            z-index: 110;
         }
 
-        .copyright {
-            text-align: center;
-            color: #666;
-            font-size: 12px;
-            margin-top: 30px;
-            padding: 20px 0;
-            border-top: 1px solid #333;
+        .footer-text {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #777;
         }
-        
-        .legal-disclaimer {
-            background-color: black;
-            color: #333;
-            font-size: 8px;
-            line-height: 1.3;
-            margin-top: 40px;
-            padding: 15px 20px;
-            text-align: center;
-            border-top: 2px solid #ff0000;
-            width: 100vw;
-            position: relative;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
+
+        .footer-text span {
+            color: var(--nfl-red);
+            font-weight: bold;
         }
+
+        /* NAV BUTTONS */
+        .nav-group { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .nav-btn {
+            color: #fff; text-decoration: none; font-size: 10px; font-weight: bold;
+            padding: 8px 0; width: 60px; text-align: center; border: 1px solid #333;
+            background: #111; transition: 0.3s;
+        }
+        .nav-btn:hover { background: var(--nfl-red); border-color: #fff; }
+
     </style>
 </head>
 <body>
-    <div class="page-wrapper">
-        
-        <!-- ====================== NEW BANNER / LINK TABLE ====================== -->
-        <table class="banner-table">
-            <tr>
-                <!-- Column 1: Spinning Football Logo -->
-                <td class="logo-column">
-                    <img src="HelmtSpin.gif" alt="Spinning Football">
-                </td>
-                
-                <!-- Column 2: Site Banner -->
-                <td class="banner-column">
-                    <img src="RNEWBanner23.gif" alt="The NFL Edge Banner">
-                </td>
-            </tr>
-            
-            <!-- Row 2: Breadcrumb -->
-            <tr>
-                <td colspan="2" class="breadcrumb-row">
-                    <div class="breadcrumb">
-                        <a href="index.html">Home</a>
-                        <span>/</span>
-                        <a href="#about">Archives</a>
-                        <span>/</span>
-                        <a href="#contact">subscribe!</a>
-                    </div>
-                </td>
-            </tr>
-        </table>
 
-        <!-- Subheader -->
-        <div class="subheader">
-            Greggy the Greek's:
-        </div>
+    <div class="dashboard-container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <img src="/images/HelmtSpin.gif" class="helmet-logo" alt="PanaGeo Logo">
+            <div class="nav-group">
+                <a href="UFL/UFLWTmp.htm" target="data_viewport" class="nav-btn">UFL</a>
+                <a href="nfleCX.htm" target="data_viewport" class="nav-btn">NFL</a>
+                <a href="Archives/Index.htm" target="data_viewport" class="nav-btn">STATS</a>
+            </div>
+        </aside>
 
-        <!-- Main Title -->
-        <h1 class="main-title">The NFL Edge</h1>
-        
-        <!-- Tagline -->
-        <p class="tagline">The original FREE Internet Analytical Handicapper</p>
-        
-        <!-- Content Frame -->
-        <div class="content-frame">
-            <iframe src="./UFL/UFLWTmp.htm" title="The UFL Picks"></iframe>
-        </div>
-        
-        <!-- Copyright -->
-        <div class="copyright">
-            &copy; 2026 The NFL Edge. All rights reserved.
-        </div>
+        <!-- MAIN VIEW -->
+        <main class="main-pane">
+            <header class="top-header">
+                <img src="/images/RNEWBanner23.gif" class="nfl-banner" alt="The NFL Edge">
+            </header>
+
+            <!-- DATA VIEWPORT -->
+            <iframe src="UFL/UFLWTmp.htm" name="data_viewport" class="projection-frame"></iframe>
+
+            <!-- FLOATING FOOTER -->
+            <footer class="floating-footer">
+                <div class="footer-text">
+                    The NFL Edge : powered by <span>PanaGeoTech</span> (c) 2026
+                </div>
+            </footer>
+        </main>
     </div>
-    
-    <!-- Legal Disclaimer -->
-    <div class="legal-disclaimer">
-        <p>
-            <strong>LEGAL DISCLAIMER:</strong> This website and all content contained herein is provided for amusement and entertainment purposes only. ...
-        </p>
-    </div>
+
 </body>
 </html>
