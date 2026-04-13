@@ -3,35 +3,40 @@ import math
 import csv
 import sys
 
-def g_s(k):
-    v = os.getenv(k)
-    if v is None:
-        sys.exit(1)
-    return float(v)
-
+# Testing Multipliers
 P_M = {
-    "1.0":  g_s("PG_PI_X"),
-    "0.75": g_s("PG_PI7"),
-    "0.5":  g_s("PG_PPI5"),
-    "0.25": g_s("PG_PI2"),
-    "0.0":  g_s("PG_PI0")
+    "1.0":  2.375,
+    "0.75": 2.314,
+    "0.5":  2.131,
+    "0.25": 2.031,
+    "0.0":  1.935
 }
-M_D = g_s("PG_MD")
+M_D = 2.0 
+
+def get_dynamic_pp4v(pf, pa, gp):
+    if float(gp) == 0: return "0.5"
+    win_pct = pf / (pf + pa) if (pf + pa) > 0 else 0.5
+    if win_pct >= 0.8: return "1.0"
+    if win_pct >= 0.6: return "0.75"
+    if win_pct >= 0.4: return "0.5"
+    if win_pct >= 0.2: return "0.25"
+    return "0.0"
 
 def c_pags(pf, pa, gp4, pp4v, v_pf, v_pa, vgp4):
     t_q = (pf / gp4) / 4
     v_q = (v_pa / vgp4) / 4
     p_c = P_M.get(str(pp4v))
     b_v = (t_q + v_q) * p_c
-    if pp4v >= 0.75:
+    pp4v_f = float(pp4v)
+    if pp4v_f >= 0.75:
         res = math.ceil(b_v + M_D)
-    elif pp4v <= 0.25:
+    elif pp4v_f <= 0.25:
         res = math.floor(b_v - M_D)
     else:
         res = round(b_v)
     return res
 
-def generate_html(rows):
+def generate_html(rows, week):
     return f"""
 <!DOCTYPE html>
 <html lang="en">
@@ -50,9 +55,9 @@ td {{ padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 0.95em; }}
 </head>
 <body>
 <div class="f">
-<header><h1>PanaGeoTech</h1></header>
+<header><h1>PanaGeoTech - WEEK {week}</h1></header>
 <table>
-<thead><tr><th>Matchup</th><th>PAGS</th></tr></thead>
+<thead><tr><th>Matchup</th><th>PAGS Projection</th></tr></thead>
 <tbody>{rows}</tbody>
 </table>
 </div>
@@ -60,26 +65,37 @@ td {{ padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 0.95em; }}
 </html>"""
 
 if __name__ == "__main__":
-    d_f = 'UFL/ufl-data.csv'
-    o_f = 'UFL/UFLWTmp.htm'
-    r_h = ""
+    standings_file = 'UFL/ufl-data.csv'
+    schedule_file = 'UFL/ufl-schedule.csv'
+    output_file = 'UFL/UFLWTmp.htm'
+    rows_html = ""
+    
     try:
-        with open(d_f, mode='r') as f:
-            reader = csv.DictReader(f)
-            for r in reader:
-                p_v = c_pags(
-                    float(r['pf']), 
-                    float(r['pa']), 
-                    float(r['gp4']), 
-                    float(r['pp4v']), 
-                    float(r['v_pf']), 
-                    float(r['v_pa']), 
-                    float(r['vgp4'])
-                )
-                r_h += f"<tr><td>{r['team']} @ {r['opp']}</td><td class='w'>{p_v}</td></tr>"
+        # Load standings into a lookup dictionary
+        with open(standings_file, mode='r') as f:
+            standings = {row['name']: row for row in csv.DictReader(f)}
         
-        with open(o_f, "w") as f:
-            f.write(generate_html(r_h))
-        print("Success")
+        # Process matchups for Week 3
+        with open(schedule_file, mode='r') as f:
+            matchups = list(csv.DictReader(f))
+            current_week = matchups[0]['week']
+            
+            for m in matchups:
+                home = standings[m['home']]
+                away = standings[m['away']]
+                
+                # Dynamic power for Home team
+                calc_pp4v = get_dynamic_pp4v(float(home['pf']), float(home['pa']), float(home['gp']))
+                
+                p_v = c_pags(
+                    float(home['pf']), float(home['pa']), float(home['gp']), 
+                    calc_pp4v, 
+                    float(away['pf']), float(away['pa']), float(away['gp'])
+                )
+                rows_html += f"<tr><td>{m['away']} @ {m['home']}</td><td class='w'>{p_v}</td></tr>"
+        
+        with open(output_file, "w") as f:
+            f.write(generate_html(rows_html, current_week))
+        print(f"Success: Week {current_week} Projections Generated.")
     except Exception as e:
-        sys.exit(1)
+        print(f"Error: {e}")
