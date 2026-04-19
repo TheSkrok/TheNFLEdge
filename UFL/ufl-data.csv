@@ -1,9 +1,5 @@
-name,pf,pa,gp,wins,pct
-Orlando Storm,71,52,3,3,1.000
-Dallas Renegades,67,32,2,2,1.000
-DC Defenders,54,42,2,1,.500
-Birmingham Stallions,35,35,2,1,.500
-St. Louis Battlehawks,31,41,2,1,.500
-Houston Gamblers,39,56,2,1,.500
-Columbus Aviators,42,67,2,0,.000
-Louisville Kings,49,73,3,0,.000
+away,home,line,ou,away_pf,away_pa,home_pf,home_pa,wp_a,wp_h
+Kings,Gamblers,-2.5,45.5,49,63,46,101,0,.33
+Renegades,Aviators,-4.5,46.5,95,55,65,95,.9,0
+Battlehawks,Defenders,-3.5,43.5,65,71,99,49,.7,.8
+Storm,Stallions,-1.5,45.5,71,52,65,69,.99,.3
