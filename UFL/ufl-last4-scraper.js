@@ -66,7 +66,7 @@ data.events.forEach((event, index) => {
     <h4>${aAbbr} @ ${hAbbr} ${cleanLine} ${total}</h4>
     <table>
         <tr><td><b>Projected Score:</b></td><td>[PROJ_SCORE_${aAbbr}_${hAbbr}]</td></tr>
-        <tr><td><b>Final Score:</b></td><td>--</td></tr>
+         <tr><td><b>Final Score:</b></td><td>[FINAL_SCORE_${aAbbr}_${hAbbr}]</td></tr>
     </table>
 </div>\n`;
     }
@@ -107,6 +107,11 @@ function calculateRollingSums(events) {
 
             if (!teams[name]) teams[name] = [];
             teams[name].push({ pf, pa, win: res === 'W' ? 1 : 0 });
+            
+            // BO: Capture the actual results of the game that just finished
+            teams[name].latest_pf = pf;
+            teams[name].latest_pa = pa;
+
         });
     });
 
@@ -116,8 +121,17 @@ function calculateRollingSums(events) {
         const totals = last4.reduce((acc, g) => {
             acc.pf += g.pf; acc.pa += g.pa; acc.w += g.win; return acc;
         }, { pf: 0, pa: 0, w: 0 });
-        matrix[name] = { pf_sum: totals.pf, pa_sum: totals.pa, wins: totals.w, gp: last4.length };
+          matrix[name] = { 
+            pf_sum: totals.pf, 
+            pa_sum: totals.pa, 
+            wins: totals.w, 
+            gp: last4.length,
+            // BO: These fields allow the Engine to write the "Final Score" on the card
+            last_pf: teams[name].latest_pf,
+            last_pa: teams[name].latest_pa
+        };
     }
+
     return matrix;
 }
 
